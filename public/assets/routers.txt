@@ -1,0 +1,12 @@
+|
++---root('/')
+|
++---assets('/assets')+---favicon('/favicon.ico')
+|                    |
+|                    +---routers map('/routers')            e.g. http://localhost:3000/assets/routers
+|
++---home('/home')
+|
++---version(/1)+---users(/users)+---id(/[number])           e.g. /1/users/5?name=lonmee&sex=male&age=40
+               |
+               +---contacts(/contacts)+---id(/p)
