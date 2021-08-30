@@ -14,14 +14,18 @@
     "koa": "^2.13.1",
     "koa-router": "^10.1.1",
     "koa-session": "^6.2.0",
-    "koa-static": "^5.0.0"
+    "koa-static": "^5.0.0",
+    "mongodb": "^4.1.1",
+    "mysql": "^2.18.1"
   },
   "devDependencies": {
     "@types/keygrip": "^1.0.2",
     "@types/koa": "^2.13.4",
     "@types/koa-router": "^7.4.4",
     "@types/koa-session": "^5.10.4",
-    "@types/koa-static": "^4.0.2"
+    "@types/koa-static": "^4.0.2",
+    "@types/mongodb": "^4.0.7",
+    "@types/mysql": "^2.15.19"
   },
   "license": "ISC"
 }
