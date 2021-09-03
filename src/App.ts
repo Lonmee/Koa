@@ -7,7 +7,7 @@ import session from "koa-session";
 import {SESSION_CONFIG} from "./Config";
 import Keygrip from "keygrip";
 import serve from "koa-static";
-import {setup} from "./db/Mongo";
+import {Mongo} from "./db/Mongo";
 
 const app = new Koa();
 const router = new Router();
@@ -23,11 +23,12 @@ app
     .use(serve("./public", {extensions: ['.txt']}))
     .use(router.routes())
     .use(router.allowedMethods())
-    .listen(3000, 'localhost', () => {
-        console.log(`node start @ http://localhost:3000`);
+    .listen(8080, 'localhost', () => {
+        console.log(`node start @ http://localhost:8080`);
     });
 
-setup()
+Mongo
+    .setup()
     .then(console.log)
     .catch(console.error)
 // .finally(() => client.close());

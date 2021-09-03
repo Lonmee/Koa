@@ -5,7 +5,7 @@ const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
 const dbName = 'koa';
 
-export async function setup() {
+async function setup() {
     await client.connect();
     console.log('Connected successfully to server');
     const db = client.db(dbName);
@@ -14,21 +14,21 @@ export async function setup() {
 }
 
 const op = {
-    c: () => {
-
+    c: (params: Record<string, string>) => {
+        console.log('create:', params);
     },
-    r: () => {
-
+    r: (params: Record<string, string>) => {
+        console.log('receive:',params);
     },
-    u: () => {
-
+    u: (params: Record<string, string>) => {
+        console.log('update:',params);
     },
-    d: () => {
-
+    d: (params: Record<string, string>) => {
+        console.log('delete:',params);
     },
 };
 
-export default {setup, op}
+export const Mongo = {setup, op}
 
 /**
  * format: "mongodb://user:password@localhost:27017/dbname"
