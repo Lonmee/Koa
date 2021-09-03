@@ -7,7 +7,7 @@ import session from "koa-session";
 import {SESSION_CONFIG} from "./Config";
 import Keygrip from "keygrip";
 import serve from "koa-static";
-import {DBPool} from "./Utils";
+import {setupMongoDB} from "./db/DB";
 
 const app = new Koa();
 const router = new Router();
@@ -27,12 +27,8 @@ app
         console.log(`node start @ http://localhost:3000`);
     });
 
-DBPool.getConnection((err, connection) => {
-    connection.query(`SELECT * FROM Tech`, (error, results, fields) => {
-        connection.release();
-        if (error) throw error;
-        for (const result of results) {
-            console.log(result.name);
-        }
-    })
-})
+setupMongoDB();
+
+// setupMongoDB2()
+//     .then(console.log)
+//     .catch(console.error);

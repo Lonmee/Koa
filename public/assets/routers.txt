@@ -3,7 +3,7 @@
 |
 +---assets('/assets')+---favicon('/favicon.ico')
 |                    |
-|                    +---routers map('/routers')            e.g. http://localhost:3000/assets/routers
+|                    +---routers map('/routers')            e.g. /assets/routers
 |
 +---home('/home')
 |

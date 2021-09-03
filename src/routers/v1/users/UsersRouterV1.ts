@@ -1,5 +1,5 @@
 import Router from "koa-router";
-import {logInfo} from "../../../Utils";
+import {USERS_POOL} from "../../../db/DB";
 
 const router = new Router()
 /**
@@ -7,14 +7,33 @@ const router = new Router()
  */
 router.all('/:id',
     async (context, next) => {
+        const {method} = context;
+        const {id = 0} = context.params;
+        let query = '';
+        switch (method) {
+            case 'get':
+                query = '';
+            case 'post':
+                query = 'INSERT INTO users (name, sex, age, phone, wechat) VALUES (<name>, <sex>, <age>, <phone>, <wechat>);';
+            case 'put':
+                query = '';
+            case 'delete':
+                query = '';
+        }
         await next();
-        console.log("do response");
-        logInfo(context);
+        USERS_POOL.getConnection((err, connection) => {
+            connection.query(query, (error, results, fields) => {
+                connection.release();
+                if (error) throw error;
+                for (const result of results) {
+                    console.log(result.name);
+                }
+            })
+        })
     },
     async (context, next) => {
-        console.log("dbop");
         await next();
-        console.log("dbop2");
+
     })
 
 export default router;
