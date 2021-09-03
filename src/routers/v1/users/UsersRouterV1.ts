@@ -1,5 +1,5 @@
 import Router from "koa-router";
-import {USERS_POOL} from "../../../db/DB";
+import {POOLS} from "../../../db/Pools";
 
 const router = new Router()
 /**
@@ -21,7 +21,7 @@ router.all('/:id',
                 query = '';
         }
         await next();
-        USERS_POOL.getConnection((err, connection) => {
+        POOLS.USERS.getConnection((err, connection) => {
             connection.query(query, (error, results, fields) => {
                 connection.release();
                 if (error) throw error;

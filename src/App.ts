@@ -7,7 +7,7 @@ import session from "koa-session";
 import {SESSION_CONFIG} from "./Config";
 import Keygrip from "keygrip";
 import serve from "koa-static";
-import {setupMongoDB} from "./db/DB";
+import {setup} from "./db/Mongo";
 
 const app = new Koa();
 const router = new Router();
@@ -27,8 +27,7 @@ app
         console.log(`node start @ http://localhost:3000`);
     });
 
-setupMongoDB();
-
-// setupMongoDB2()
-//     .then(console.log)
-//     .catch(console.error);
+setup()
+    .then(console.log)
+    .catch(console.error)
+// .finally(() => client.close());
