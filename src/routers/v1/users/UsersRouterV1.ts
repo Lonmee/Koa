@@ -1,6 +1,7 @@
 import Router from "koa-router";
 import {POOLS} from "../../../db/Pools";
 import {Mongo} from "../../../db/Mongo";
+import {logInfo} from "../../../Utils";
 
 const router = new Router()
 /**
@@ -15,8 +16,11 @@ router.all(['/', '/:id'],
             case 'GET':
                 query = '';
                 Mongo.op.r(context.params);
+                logInfo(context);
+                break;
             case 'POST':
-                Mongo.op.c(context.params);
+                // await Mongo.op.c(context);
+                logInfo(context);
                 break;
             // query = 'INSERT INTO users (name, sex, age, phone, wechat) VALUES (<name>, <sex>, <age>, <phone>, <wechat>);';
             case 'PUT':
@@ -38,7 +42,6 @@ router.all(['/', '/:id'],
         // })
     },
     async (context, next) => {
-        context.body = 'here we go users api';
     })
 
 export default router;

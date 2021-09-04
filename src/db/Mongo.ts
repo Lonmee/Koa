@@ -1,5 +1,7 @@
 import {MongoClient, MongoServerError} from "mongodb";
 import ConnectionString from "mongodb-connection-string-url";
+import {ExtendableContext} from "koa";
+import {parsePostData, parseQueryStr} from "../Utils";
 
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
@@ -14,17 +16,18 @@ async function setup() {
 }
 
 const op = {
-    c: (params: Record<string, string>) => {
-        console.log('create:', params);
+    c: async (context: ExtendableContext) => {
+        const postData = await parsePostData(context)
+        context.body = postData;
     },
     r: (params: Record<string, string>) => {
-        console.log('receive:',params);
+        console.log('retrieve:', params);
     },
     u: (params: Record<string, string>) => {
-        console.log('update:',params);
+        console.log('update:', params);
     },
     d: (params: Record<string, string>) => {
-        console.log('delete:',params);
+        console.log('delete:', params);
     },
 };
 

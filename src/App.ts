@@ -4,10 +4,11 @@ import HomeRouter from "./routers/HomeRouter";
 import UsersRouter from "./routers/v1/users/UsersRouterV1";
 import UsersRouter2 from "./routers/v2/users/UsersRouterV2";
 import session from "koa-session";
-import {SESSION_CONFIG} from "./Config";
 import Keygrip from "keygrip";
 import serve from "koa-static";
 import {Mongo} from "./db/Mongo";
+import cors from "koa2-cors";
+import {CORS_OPTION, SESSION_CONFIG} from "./conf/Conf";
 
 const app = new Koa();
 const router = new Router();
@@ -20,6 +21,7 @@ router.use('/2/users', UsersRouter2.routes());
 
 app
     .use(session(SESSION_CONFIG, app))
+    .use(cors(CORS_OPTION))
     .use(serve("./public", {extensions: ['.txt']}))
     .use(router.routes())
     .use(router.allowedMethods())
