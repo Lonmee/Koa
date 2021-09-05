@@ -26,9 +26,15 @@ router.all(['/', '/:id'],
             case 'PUT':
                 query = '';
                 Mongo.op.u(context.params);
+                logInfo(context);
+                break;
             case 'DELETE':
                 query = '';
                 Mongo.op.d(context.params);
+                logInfo(context);
+                break;
+            default:
+                logInfo(context);
         }
         await next();
         // POOLS.USERS.getConnection((err, connection) => {

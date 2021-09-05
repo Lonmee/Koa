@@ -1,7 +1,7 @@
 import {MongoClient, MongoServerError} from "mongodb";
 import ConnectionString from "mongodb-connection-string-url";
 import {ExtendableContext} from "koa";
-import {parsePostData, parseQueryStr} from "../Utils";
+import {parsePostData} from "../Utils";
 
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
