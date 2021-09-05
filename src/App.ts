@@ -15,9 +15,10 @@ const router = new Router();
 
 app.keys = new Keygrip(['im a newer secret', 'i from Lonmee'], 'sha256');
 
-router.use(HomeRouter.routes());
-router.use('/1/users', UsersRouter.routes());
-router.use('/2/users', UsersRouter2.routes());
+router
+    .use(HomeRouter.routes())
+    .use('/1/users', UsersRouter.routes())
+    .use('/2/users', UsersRouter2.routes());
 
 app
     .use(session(SESSION_CONFIG, app))
