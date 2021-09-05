@@ -21,7 +21,7 @@ router.use('/2/users', UsersRouter2.routes());
 
 app
     .use(session(SESSION_CONFIG, app))
-    // .use(cors(CORS_OPTION))
+    .use(cors(CORS_OPTION))
     .use(serve("./public", {extensions: ['.txt']}))
     .use(router.routes())
     .use(router.allowedMethods())
