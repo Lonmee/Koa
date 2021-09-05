@@ -16,11 +16,9 @@ router.all(['/', '/:id'],
             case 'GET':
                 query = '';
                 Mongo.op.r(context.params);
-                logInfo(context);
                 break;
             case 'POST':
-                // await Mongo.op.c(context);
-                logInfo(context);
+                await Mongo.op.c(context);
                 break;
             // query = 'INSERT INTO users (name, sex, age, phone, wechat) VALUES (<name>, <sex>, <age>, <phone>, <wechat>);';
             case 'PUT':

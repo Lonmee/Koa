@@ -1,24 +1,45 @@
-import {MongoClient, MongoServerError} from "mongodb";
-import ConnectionString from "mongodb-connection-string-url";
-import {ExtendableContext} from "koa";
+import {Collection, MongoClient, MongoServerError, ObjectId} from "mongodb";
+import {ExtendableContext, HttpError} from "koa";
 import {parsePostData} from "../Utils";
 
 const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
 const dbName = 'koa';
 
+let users: Collection<Document>;
+
 async function setup() {
     await client.connect();
     console.log('Connected successfully to server');
     const db = client.db(dbName);
-    const users = db.collection('users');
+    users = db.collection('users');
     return 'done';
 }
 
 const op = {
     c: async (context: ExtendableContext) => {
-        const postData = await parsePostData(context)
-        context.body = postData;
+        const postData: any = await parsePostData(context)
+        const count = await users.find({name: postData.name}).count();
+        if (count) {
+            return context.body = {
+                acknowledged: false,
+                insertedId: "",
+                msg: 'name conflict'
+            };
+        }
+        try {
+            const insertResult = await users.insertOne({
+                _id: new ObjectId(),
+                ...postData,
+            });
+            console.log('Inserted documents =>', insertResult);
+            context.body = insertResult;
+        } catch (error) {
+            if (error instanceof MongoServerError) {
+                console.log(`Error worth logging: ${error}`);
+            }
+            throw error;
+        }
     },
     r: (params: Record<string, string>) => {
         console.log('retrieve:', params);
