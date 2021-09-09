@@ -41,7 +41,6 @@ router.all(['/', '/:id'],
         //             console.log(result.name);
         //         }
         //     })
-
         // })
     },
     async (context, next) => {
