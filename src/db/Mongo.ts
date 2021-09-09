@@ -1,5 +1,4 @@
 import {Collection, MongoClient, MongoServerError, ObjectId} from "mongodb";
-import {ExtendableContext, HttpError} from "koa";
 import {parsePostData} from "../Utils";
 
 const url = 'mongodb://localhost:27017';
@@ -10,14 +9,14 @@ let users: Collection<Document>;
 
 async function setup() {
     await client.connect();
-    console.log('Connected successfully to server');
+    console.log('mongodb server connected');
     const db = client.db(dbName);
     users = db.collection('users');
-    return 'done';
+    return `done`;
 }
 
 const op = {
-    c: async (context: ExtendableContext) => {
+    c: async (context: any) => {
         const postData: any = await parsePostData(context)
         const count = await users.find({name: postData.name}).count();
         if (count) {
@@ -33,6 +32,7 @@ const op = {
                 ...postData,
             });
             console.log('Inserted documents =>', insertResult);
+            context.session.id = insertResult.insertedId;
             context.body = insertResult;
         } catch (error) {
             if (error instanceof MongoServerError) {
@@ -41,8 +41,12 @@ const op = {
             throw error;
         }
     },
-    r: (params: Record<string, string>) => {
-        console.log('retrieve:', params);
+    r: async (context: any) => {
+        const {id = 0} = context.params;
+        console.log(id, context.session.id, id || context.session.id);
+        const findResult = await users.findOne({_id: new ObjectId(id || context.session.id)});
+        console.log('retrieve:', findResult);
+        context.body = findResult;
     },
     u: (params: Record<string, string>) => {
         console.log('update:', params);

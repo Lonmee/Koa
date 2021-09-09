@@ -8,19 +8,17 @@ const router = new Router()
  * e.g. http://localhost:3000/1/users/5?n=lonmee&sex=male&age=40
  */
 router.all(['/', '/:id'],
-    async (context, next) => {
-        const {method} = context;
-        const {id = 0} = context.params;
+    async (context: any, next) => {
         let query = '';
-        switch (method) {
+        switch (context.method) {
             case 'GET':
-                query = '';
-                Mongo.op.r(context.params);
+                // query = '';
+                await Mongo.op.r(context);
                 break;
             case 'POST':
+                // query = 'INSERT INTO users (name, sex, age, phone, wechat) VALUES (<name>, <sex>, <age>, <phone>, <wechat>);';
                 await Mongo.op.c(context);
                 break;
-            // query = 'INSERT INTO users (name, sex, age, phone, wechat) VALUES (<name>, <sex>, <age>, <phone>, <wechat>);';
             case 'PUT':
                 query = '';
                 Mongo.op.u(context.params);
@@ -43,6 +41,7 @@ router.all(['/', '/:id'],
         //             console.log(result.name);
         //         }
         //     })
+
         // })
     },
     async (context, next) => {
