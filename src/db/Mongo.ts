@@ -1,11 +1,13 @@
 import {Collection, MongoClient, MongoServerError, ObjectId} from "mongodb";
 import {parsePostData} from "../Utils";
 
-const url = 'mongodb://localhost:27017';
-const client = new MongoClient(url);
-const dbName = 'koa';
+const
+    url = 'mongodb://localhost:27017',
+    client = new MongoClient(url),
+    dbName = 'koa';
 
-let users: Collection<Document>;
+let
+    users: Collection<Document>;
 
 async function setup() {
     await client.connect();
@@ -43,10 +45,11 @@ const op = {
     },
     r: async (context: any) => {
         const {id = 0} = context.params;
-        console.log(id, context.session.id, id || context.session.id);
-        const findResult = await users.findOne({_id: new ObjectId(id || context.session.id)});
-        console.log('retrieve:', findResult);
+        const uId = new ObjectId(id || context.session.id)
+        console.log(uId);
+        const findResult = await users.findOne({_id: uId});
         context.body = findResult;
+        console.log(findResult);
     },
     u: (params: Record<string, string>) => {
         console.log('update:', params);

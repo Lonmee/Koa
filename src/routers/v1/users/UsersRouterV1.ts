@@ -8,7 +8,7 @@ const router = new Router()
  * e.g. http://localhost:3000/1/users/5?n=lonmee&sex=male&age=40
  */
 router.all(['/', '/:id'],
-    async (context: any, next) => {
+    async (context, next) => {
         let query = '';
         switch (context.method) {
             case 'GET':

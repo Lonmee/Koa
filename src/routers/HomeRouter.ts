@@ -2,6 +2,8 @@ import Router from "koa-router";
 import {logInfo} from "../Utils";
 
 const router = new Router()
+const homeHtml = `<html><h3>homepage of api svr</h3>
+<a href="http://localhost:8080/assets/routers">api maps</a>`;
 router.get('/', async (context, next) => {
         await next();
         const rt = context.response.get('X-Response-Time');
@@ -14,7 +16,7 @@ router.get('/', async (context, next) => {
         context.set('X-Response-Time', `${ms}ms`);
     },
     async (context, next) => {
-        context.body = 'home usersRouter';
+        context.body = homeHtml;
     })
     .get('/home', (context, next) => {
         logInfo(context);

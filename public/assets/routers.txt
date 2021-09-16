@@ -1,12 +1,8 @@
 |
-+---root('/')
++---root('/')           +---favicon.ico
 |
-+---assets('/assets')+---favicon('/favicon.ico')
-|                    |
-|                    +---routers map('/routers')            e.g. /assets/routers
++---assets('/assets')   +---routers maps('/routers')
 |
-+---home('/home')
-|
-+---version(/1)+---users(/users)+---id(/[number])           e.g. /1/users/5?name=lonmee&sex=male&age=40
-               |
-               +---contacts(/contacts)+---id(/p)
++---version(/[v])       +---users(/users)               +---id(/opt:[number])           e.g. /1/users/5?name=lonmee&sex=male&age=40
+                        |
+                        +---st(/st)                     +---id(/opt:[number])
