@@ -8,7 +8,7 @@ import serve from "koa-static";
 import {Mongo} from "./db/Mongo";
 import cors from "koa2-cors";
 import {APP_CONFIG, CORS_OPTION, SESSION_CONFIG} from "./Config";
-import {Redis} from "./db/Redis";
+import redis, {Redis} from "./db/Redis";
 
 const app = new Koa(APP_CONFIG);
 const router = new Router();
@@ -33,9 +33,3 @@ Mongo
     .then(console.log)
     .catch(console.error)
 // .finally(() => client.close());
-
-// Redis
-//     .publishTest();
-
-Redis
-    .streamTest();

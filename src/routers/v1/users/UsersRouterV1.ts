@@ -2,6 +2,7 @@ import Router from "koa-router";
 import {POOLS} from "../../../db/Pools";
 import {Mongo} from "../../../db/Mongo";
 import {logInfo} from "../../../Utils";
+import redis, {Redis} from "../../../db/Redis";
 
 const router = new Router()
 /**
@@ -47,3 +48,28 @@ router.all(['/', '/:id'],
     })
 
 export default router;
+
+/* redis usage */
+// Redis
+//     .publishTest();
+//
+// Redis
+//     .streamTest();
+//
+// redis
+//     .set('user', 'Lonmee')
+//     .then(console.log)
+//     .catch(console.error);
+//
+// redis
+//     .get('user')
+//     .then(console.log)
+//     .catch(console.error);
+//
+// redis
+//     .zadd("sortedSet", 1, "one", 2, "dos", 4, "quatro", 3, "three");
+// redis
+//     .zrange("sortedSet", 0, 3, "WITHSCORES")
+//     .then(console.log);
+//
+// redis.set("key", 100, "EX", 10);

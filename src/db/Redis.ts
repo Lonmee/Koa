@@ -86,4 +86,5 @@ function streamTest() {
         .catch(console.error);
 }
 
-export const Redis = {publishTest, streamTest, redis}
+export const Redis = {publishTest, streamTest}
+export default redis;
