@@ -1,3 +1,5 @@
+import fs from "fs";
+
 export const APP_CONFIG = {
     // env?: string | undefined,
     keys: ['Lonmee', '@Koa']
@@ -10,13 +12,13 @@ export const APP_CONFIG = {
 export const SESSION_CONFIG = {
     CURRENT: {
         key: 'koa:sess',    // cookie key (default is koa:sess)
-        maxAge: 86400000,   // cookie的过期时间 maxAge in ms (default is 1 days)
+        maxAge: 86400000 * 7,   // cookie的过期时间 maxAge in ms (default is 1 days)
         autoCommit: true,   // 自动设置表头
         overwrite: true,    // 是否可以overwrite    (默认default true)
         httpOnly: true,     // cookie是否只有服务器端可以访问 httpOnly or not (default true)
         signed: true,       // 签名默认true
         rolling: false,     // 在每次请求时强行设置cookie，这将重置cookie过期时间（默认：false）
-        renew: false,       // (boolean) renew session when session is nearly expired,
+        renew: true,       // (boolean) renew session when session is nearly expired,
         secure: false,
     },
     DEFAULT: {
@@ -57,4 +59,9 @@ export const CORS_OPTION = {
     allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], //设置所允许的HTTP请求方法'
     allowHeaders: ['Content-Type', 'Authorization', 'Accept'], //设置服务器支持的所有头信息字段
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization', 'Accept'] //设置获取其他自定义字段
+}
+
+export const SSL_OPTION = {
+    key: fs.readFileSync('/usr/local/etc/nginx/ssl/server.key.unsecure'),
+    cert: fs.readFileSync('/usr/local/etc/nginx/ssl/server.crt')
 }

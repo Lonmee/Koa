@@ -7,8 +7,8 @@ import session from "koa-session";
 import serve from "koa-static";
 import {Mongo} from "./db/Mongo";
 import cors from "koa2-cors";
-import {APP_CONFIG, CORS_OPTION, SESSION_CONFIG} from "./Config";
-import redis, {Redis} from "./db/Redis";
+import {APP_CONFIG, CORS_OPTION, SESSION_CONFIG, SSL_OPTION} from "./Config";
+import * as https from "https";
 
 const app = new Koa(APP_CONFIG);
 const router = new Router();
@@ -25,7 +25,13 @@ app
     .use(router.routes())
     .use(router.allowedMethods())
     .listen(8080, 'localhost', () => {
-        console.log(`koa start @ http://localhost:8080`);
+        console.log(`koa @ http://localhost:8080`);
+    });
+
+https
+    .createServer(SSL_OPTION, app.callback())
+    .listen(8081, 'localhost', () => {
+        console.log(`koa https @ https://localhost:8081`);
     });
 
 Mongo

@@ -45,11 +45,16 @@ const op = {
     },
     r: async (context: any) => {
         const {id = 0} = context.params;
-        const uId = new ObjectId(id || context.session.id)
-        console.log(uId);
-        const findResult = await users.findOne({_id: uId});
-        context.body = findResult;
-        console.log(findResult);
+        console.log('uid: ', id);
+        if (id == 0) {
+            context.body = 'no id';
+        } else {
+            const uId = new ObjectId(id || context.session.id);
+            console.log('ObjectId: ', uId);
+            const findResult = await users.findOne({_id: uId});
+            context.body = findResult;
+            console.log(findResult);
+        }
     },
     u: (params: Record<string, string>) => {
         console.log('update:', params);
