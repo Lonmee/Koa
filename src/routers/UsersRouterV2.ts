@@ -1,5 +1,5 @@
 import Router from "koa-router";
-import {logInfo} from "../../../Utils";
+import {logInfo} from "../Utils";
 
 const router = new Router()
 /**

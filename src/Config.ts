@@ -1,48 +1,24 @@
 import fs from "fs";
 
 export const APP_CONFIG = {
-    // env?: string | undefined,
-    keys: ['Lonmee', '@Koa']
-    // proxy?: boolean | undefined,
-    // subdomainOffset?: number | undefined,
-    // proxyIpHeader?: string | undefined,
-    // maxIpsCount?: number | undefined
+    // env?: string | undefined,                // 默认是 NODE_ENV 或 "development"
+    keys: ['Lonmee', '@Koa']                    // 签名的 cookie 密钥数组
+    // proxy?: boolean | undefined,             // 当真正的代理头字段将被信任时
+    // subdomainOffset?: number | undefined,    // 忽略 .subdomains 的 app.subdomainOffset 偏移量，默认为 2
+    // proxyIpHeader?: string | undefined,      // 代理 ip 消息头, 默认为 X-Forwarded-For
+    // maxIpsCount?: number | undefined         // 从代理 ip 消息头读取的最大 ips, 默认为 0 (代表无限)
 }
 
 export const SESSION_CONFIG = {
-    CURRENT: {
-        key: 'koa:sess',    // cookie key (default is koa:sess)
-        maxAge: 86400000 * 7,   // cookie的过期时间 maxAge in ms (default is 1 days)
-        autoCommit: true,   // 自动设置表头
-        overwrite: true,    // 是否可以overwrite    (默认default true)
-        httpOnly: true,     // cookie是否只有服务器端可以访问 httpOnly or not (default true)
-        signed: true,       // 签名默认true
-        rolling: false,     // 在每次请求时强行设置cookie，这将重置cookie过期时间（默认：false）
-        renew: true,       // (boolean) renew session when session is nearly expired,
-        secure: false,
-    },
-    DEFAULT: {
-        key: 'koa.sess', /** (string) cookie key (default is koa.sess) */
-        /** (number || 'session') maxAge in ms (default is 1 days) */
-        /** 'session' will result in a cookie that expires when session/browser is closed */
-        /** Warning: If a session cookie is stolen, this cookie will never expire */
-        maxAge: 86400000,
-        autoCommit: true,
-        /** (boolean) automatically commit headers (default true) */
-        overwrite: true,
-        /** (boolean) can overwrite or not (default true) */
-        httpOnly: true,
-        /** (boolean) httpOnly or not (default true) */
-        signed: true,
-        /** (boolean) signed or not (default true) */
-        rolling: false,
-        /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */
-        renew: false,
-        /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/
-        secure: true,
-        /** (boolean) secure cookie*/
-        sameSite: null, /** (string) session cookie sameSite options (default null, don't set it) */
-    }
+    key: 'koa:sess',        // cookie key (default is koa:sess)
+    maxAge: 86400000 * 7,   // cookie的过期时间 maxAge in ms (default is 1 days)
+    autoCommit: true,       // 自动设置表头
+    overwrite: true,        // 是否可以overwrite    (默认default true)
+    httpOnly: true,         // cookie是否只有服务器端可以访问 httpOnly or not (default true)
+    signed: true,           // 签名默认true
+    rolling: false,         // 在每次请求时强行设置cookie，这将重置cookie过期时间（默认：false）
+    renew: true,            // (boolean) renew session when session is nearly expired,
+    secure: false,          // (string) session cookie sameSite options (default null, don't set it)
 };
 
 export const CORS_OPTION = {
