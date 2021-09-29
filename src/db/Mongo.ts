@@ -44,12 +44,12 @@ const op = {
         }
     },
     r: async (context: any) => {
-        const {id = 0} = context.params;
+        const id = context.params.id || context.session.id;
         console.log('uid: ', id);
         if (id == 0) {
             context.body = 'no id';
         } else {
-            const uId = new ObjectId(id || context.session.id);
+            const uId = new ObjectId(id);
             console.log('ObjectId: ', uId);
             const findResult = await users.findOne({_id: uId});
             context.body = findResult;

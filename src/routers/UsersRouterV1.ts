@@ -1,8 +1,6 @@
 import Router from "koa-router";
-import {POOLS} from "../db/Pools";
 import {Mongo} from "../db/Mongo";
 import {logInfo} from "../Utils";
-import redis, {Redis} from "../db/Redis";
 
 const router = new Router()
 /**
