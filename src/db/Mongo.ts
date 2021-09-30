@@ -1,70 +1,38 @@
-import {Collection, MongoClient, MongoServerError, ObjectId} from "mongodb";
-import {parsePostData} from "../Utils";
+import {Collection, MongoClient} from "mongodb";
+import {DB_CONFIG} from "../Config";
 
 const
-    url = 'mongodb://localhost:27017',
-    client = new MongoClient(url),
-    dbName = 'koa';
+    client = new MongoClient(DB_CONFIG.mongodb.url);
 
-let
-    users: Collection<Document>;
-
-async function setup() {
-    await client.connect();
-    console.log('mongodb server connected');
-    const db = client.db(dbName);
-    users = db.collection('users');
-    return `done`;
+enum COLLECTIONS_KEY {
+    users,
+    foo,
 }
 
-const op = {
-    c: async (context: any) => {
-        const postData: any = await parsePostData(context)
-        const count = await users.find({name: postData.name}).count();
-        if (count) {
-            return context.body = {
-                acknowledged: false,
-                insertedId: "",
-                msg: 'name conflict'
-            };
-        }
-        try {
-            const insertResult = await users.insertOne({
-                _id: new ObjectId(),
-                ...postData,
-            });
-            console.log('Inserted documents =>', insertResult);
-            context.session.id = insertResult.insertedId;
-            context.body = insertResult;
-        } catch (error) {
-            if (error instanceof MongoServerError) {
-                console.log(`Error worth logging: ${error}`);
-            }
-            throw error;
-        }
-    },
-    r: async (context: any) => {
-        const id = context.params.id || context.session.id;
-        console.log('uid: ', id);
-        if (id == 0) {
-            context.body = 'no id';
-        } else {
-            const uId = new ObjectId(id);
-            console.log('ObjectId: ', uId);
-            const findResult = await users.findOne({_id: uId});
-            context.body = findResult;
-            console.log(findResult);
-        }
-    },
-    u: (params: Record<string, string>) => {
-        console.log('update:', params);
-    },
-    d: (params: Record<string, string>) => {
-        console.log('delete:', params);
-    },
-};
+const collections: Collection<Document>[] = [];
 
-export const Mongo = {setup, op}
+async function setup() {
+    // async method
+    await client.connect();
+    const db = client.db(DB_CONFIG.mongodb.dbName);
+    collections[COLLECTIONS_KEY.users] = db.collection(COLLECTIONS_KEY[COLLECTIONS_KEY.users]);
+    collections[COLLECTIONS_KEY.foo] = db.collection(COLLECTIONS_KEY[COLLECTIONS_KEY.foo]);
+    return 'mongodb server connected';
+
+    // promise method
+    // return new Promise((resolve, reject) => {
+    //     client.connect()
+    //         .then(client => {
+    //             const db = client.db(DB_CONFIG.mongodb.dbName);
+    //             collections[COLLECTIONS_KEY.users] = db.collection(COLLECTIONS_KEY[COLLECTIONS_KEY.users]);
+    //             collections[COLLECTIONS_KEY.foo] = db.collection(COLLECTIONS_KEY[COLLECTIONS_KEY.foo]);
+    //             resolve('mongodb server connected');
+    //         })
+    //         .catch(reject);
+    // })
+}
+
+export const Mongo = {COLLECTIONS_KEY, collections, setup}
 
 /**
  * format: "mongodb://user:password@localhost:27017/dbname"

@@ -1,73 +1,46 @@
 import Router from "koa-router";
 import {Mongo} from "../db/Mongo";
-import {logInfo} from "../Utils";
+import {parsePostData} from "../Utils";
+import {MongoServerError, ObjectId} from "mongodb";
 
 const router = new Router()
-/**
- * e.g. http://localhost:3000/1/users/5?n=lonmee&sex=male&age=40
- */
-router.all(['/', '/:id'],
-    async (context, next) => {
-        let query = '';
-        switch (context.method) {
-            case 'GET':
-                // query = '';
-                await Mongo.op.r(context);
-                break;
-            case 'POST':
-                // query = 'INSERT INTO users (name, sex, age, phone, wechat) VALUES (<name>, <sex>, <age>, <phone>, <wechat>);';
-                await Mongo.op.c(context);
-                break;
-            case 'PUT':
-                query = '';
-                Mongo.op.u(context.params);
-                logInfo(context);
-                break;
-            case 'DELETE':
-                query = '';
-                Mongo.op.d(context.params);
-                logInfo(context);
-                break;
-            default:
-                logInfo(context);
+router
+    .post(['/'], async (context, next) => {
+        // query = 'INSERT INTO users (name, sex, age, phone, wechat) VALUES (<name>, <sex>, <age>, <phone>, <wechat>);';
+        const users = Mongo.collections[Mongo.COLLECTIONS_KEY.users];
+        const postData: any = await parsePostData(context);
+        const count = await users.find({name: postData.name}).count();
+        if (count) {
+            return context.body = {
+                acknowledged: false,
+                insertedId: "",
+                msg: 'name conflict'
+            };
         }
-        await next();
-        // POOLS.USERS.getConnection((err, connection) => {
-        //     connection.query(query, (error, results, fields) => {
-        //         connection.release();
-        //         if (error) throw error;
-        //         for (const result of results) {
-        //             console.log(result.name);
-        //         }
-        //     })
-        // })
-    },
-    async (context, next) => {
+        try {
+            const insertResult = await users.insertOne({
+                _id: new ObjectId(),
+                ...postData,
+            });
+            context.session!.id = insertResult.insertedId;
+            context.body = insertResult;
+        } catch (error) {
+            if (error instanceof MongoServerError) {
+                console.log(`Error worth logging: ${error}`);
+            }
+            throw error;
+        }
     })
+    .get(['/', '/:id'], async (context, next) => {
+        const users = Mongo.collections[Mongo.COLLECTIONS_KEY.users];
+        const id = context.params.id || context.session!.id;
+        if (id == 0) {
+            context.body = 'no id';
+        } else {
+            const uId = new ObjectId(id);
+            const findResult = await users.findOne({_id: uId});
+            context.body = findResult;
+        }
+    });
 
 export default router;
-
-/* redis usage */
-// Redis
-//     .publishTest();
-//
-// Redis
-//     .streamTest();
-//
-// redis
-//     .set('user', 'Lonmee')
-//     .then(console.log)
-//     .catch(console.error);
-//
-// redis
-//     .get('user')
-//     .then(console.log)
-//     .catch(console.error);
-//
-// redis
-//     .zadd("sortedSet", 1, "one", 2, "dos", 4, "quatro", 3, "three");
-// redis
-//     .zrange("sortedSet", 0, 3, "WITHSCORES")
-//     .then(console.log);
-//
-// redis.set("key", 100, "EX", 10);

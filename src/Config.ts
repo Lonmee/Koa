@@ -1,4 +1,5 @@
 import fs from "fs";
+import {MongoClient} from "mongodb";
 
 export const APP_CONFIG = {
     // env?: string | undefined,                // 默认是 NODE_ENV 或 "development"
@@ -40,4 +41,11 @@ export const CORS_OPTION = {
 export const SSL_OPTION = {
     key: fs.readFileSync('/usr/local/etc/nginx/ssl/server.key.unsecure'),
     cert: fs.readFileSync('/usr/local/etc/nginx/ssl/server.crt')
+}
+
+export const DB_CONFIG = {
+    mongodb: {
+        url: 'mongodb://localhost:27017',
+        dbName: 'koa'
+    }
 }
