@@ -1,6 +1,6 @@
 import Router from "koa-router";
 import {Mongo} from "../db/Mongo";
-import {parsePostData} from "../Utils";
+import {logInfo, parsePostData} from "../Utils";
 import {MongoServerError, ObjectId} from "mongodb";
 
 const router = new Router()
@@ -41,6 +41,15 @@ router
             const findResult = await users.findOne({_id: uId});
             context.body = findResult;
         }
+    })
+    .put(['/', '/:id'], async (context, next) => {
+        logInfo(context);
+    })
+    .patch(['/', '/:id'], async (context, next) => {
+        logInfo(context);
+    })
+    .delete(['/', '/:id'], async (context, next) => {
+        logInfo(context);
     });
 
 export default router;

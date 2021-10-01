@@ -11,7 +11,7 @@ export const APP_CONFIG = {
 }
 
 export const SESSION_CONFIG = {
-    key: 'koa:sess',        // cookie key (default is koa:sess)
+    key: 'koa.sess',        // cookie key (default is koa:sess)
     maxAge: 86400000 * 7,   // cookie的过期时间 maxAge in ms (default is 1 days)
     autoCommit: true,       // 自动设置表头
     overwrite: true,        // 是否可以overwrite    (默认default true)
