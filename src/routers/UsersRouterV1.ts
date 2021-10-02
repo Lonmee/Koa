@@ -31,14 +31,13 @@ router
                     opOption = {key: usersKey, type: Mongo.OP_TYPE.c, postData: {...postData}};
                     const insertResult: any = await mongoOP(opOption);
                     context.session!.id = insertResult.insertedId;
-                    context.body = {code: 200, info: insertResult.insertedId};
+                    return context.body = {code: 200, info: insertResult.insertedId};
                 } catch (error) {
                     if (error instanceof MongoServerError) {
                         console.log(`Error worth logging: ${error}`);
                     }
                     throw error;
                 }
-                break;
             case 'GET':
                 opOption = {key: usersKey, type: Mongo.OP_TYPE.r, filter: idFilter};
                 findResult = await mongoOP(opOption);
