@@ -52,15 +52,6 @@ async function setup() {
     // })
 }
 
-/**
- * get the collection specified by key
- * @param key
- * @returns {Collection<Document>}
- */
-function collection(key: COLLECTIONS_KEY) {
-    return collections[key]
-}
-
 export function mongoOP({key, type, filter = {}, postData = {}}: MongoOP) {
     const col = collections[key];
     switch (type) {
@@ -78,7 +69,7 @@ export function mongoOP({key, type, filter = {}, postData = {}}: MongoOP) {
     }
 }
 
-export const Mongo = {COLLECTIONS_KEY, OP_TYPE, setup, collection}
+export const Mongo = {COLLECTIONS_KEY, OP_TYPE, setup}
 
 /**
  * format: "mongodb://user:password@localhost:27017/dbname"

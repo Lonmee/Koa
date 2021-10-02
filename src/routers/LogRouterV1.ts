@@ -1,32 +1,35 @@
 import Router from "koa-router";
 import {parsePostData} from "../Utils";
-import {Mongo} from "../db/Mongo";
-import {FindCursor} from "mongodb";
+import {Mongo, mongoOP} from "../db/Mongo";
 
 const router = new Router()
-router.post(['/'],
-    async (context, next) => {
-        const users = Mongo.collection(Mongo.COLLECTIONS_KEY.users);
-        const postData: any = await parsePostData(context);
-        const findResult: any = await users.findOne({name: postData.name});
-        if (findResult) {
-            if (postData.pin === findResult.pin) {
-                context.session!.id = findResult._id;
-                context.body = {code: 200, info: findResult};
-            } else {
-                context.body = {code: 203, msg: 'invalid password'};
-            }
-        } else {
-            context.body = {code: 204, msg: 'invalid account'};
-        }
-        await next();
-    },
-    async (context, next) => {
-    })
-    .delete(['/'],
+const usersKey = Mongo.COLLECTIONS_KEY.users;
+router
+    .all(['/'],
         async (context, next) => {
-            context.session = null;
-            context.body = {code: 200, msg: 'successful'};
-        });
+            switch (context.method) {
+                case 'POST':
+                    const postData: any = await parsePostData(context);
+                    const opOption = {key: usersKey, type: Mongo.OP_TYPE.r, filter: {name: postData.name}};
+                    const findResult: any = await mongoOP(opOption);
+                    if (findResult) {
+                        if (postData.pin === findResult.pin) {
+                            context.session!.id = findResult._id;
+                            return context.body = findResult;
+                        } else {
+                            context.status = 203;
+                            return context.message = 'invalid password';
+                        }
+                    } else {
+                        context.status = 204;
+                        return context.message = 'invalid account';
+                    }
+                case 'DELETE':
+                    context.session = null;
+                    return context.status = 200;
+                default:
+                    return context.status = 405;
+            }
+        })
 
 export default router;
