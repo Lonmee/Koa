@@ -1,5 +1,6 @@
-import {Collection, MongoClient} from "mongodb";
+import {Collection, MongoClient, ObjectId} from "mongodb";
 import {DB_CONFIG} from "../Config";
+import {parsePostData} from "../Utils";
 
 const
     client = new MongoClient(DB_CONFIG.mongodb.url);
@@ -7,6 +8,25 @@ const
 enum COLLECTIONS_KEY {
     users,
     foo,
+}
+
+enum OP_TYPE {
+    c,
+    cm,
+    r,
+    rm,
+    u,
+    um,
+    d,
+    dm,
+    i,
+}
+
+interface MongoOP {
+    key: COLLECTIONS_KEY;
+    type: OP_TYPE;
+    filter?: any;
+    postData?: any;
 }
 
 const collections: Collection<Document>[] = [];
@@ -32,7 +52,33 @@ async function setup() {
     // })
 }
 
-export const Mongo = {COLLECTIONS_KEY, collections, setup}
+/**
+ * get the collection specified by key
+ * @param key
+ * @returns {Collection<Document>}
+ */
+function collection(key: COLLECTIONS_KEY) {
+    return collections[key]
+}
+
+export function mongoOP({key, type, filter = {}, postData = {}}: MongoOP) {
+    const col = collections[key];
+    switch (type) {
+        case OP_TYPE.c:
+            return col.insertOne({...postData});
+        case OP_TYPE.r:
+            return col.findOne(filter);
+        case OP_TYPE.u:
+            return col.updateOne(filter, {$set: {...postData}});
+        case OP_TYPE.d:
+            return col.deleteOne(filter);
+        case OP_TYPE.i:
+            // return col.indexes(COLLECTIONS_KEY[key]);
+            break;
+    }
+}
+
+export const Mongo = {COLLECTIONS_KEY, OP_TYPE, setup, collection}
 
 /**
  * format: "mongodb://user:password@localhost:27017/dbname"
@@ -40,27 +86,6 @@ export const Mongo = {COLLECTIONS_KEY, collections, setup}
 // const cs = new ConnectionString('mongodb://localhost:1234');
 // cs.searchParams.set('readPreference', 'secondary');
 // console.log(cs.href);
-
-/**
- * promise using
- */
-// const client2 = new MongoClient(url);
-//
-// export function setupMongoDB2() {
-//     return new Promise((resolve, reject) => {
-//         client2.connect()
-//             .then(() => {
-//                 const db = client.db(dbName);
-//                 const collection = db.collection('documents');
-//                 resolve(collection)
-//             })
-//             .catch(reject);
-//     })
-// }
-
-// setupMongoDB2()
-//     .then(console.log)
-//     .catch(console.error);
 
 /**
  * op
