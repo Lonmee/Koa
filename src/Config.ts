@@ -1,5 +1,6 @@
 import fs from "fs";
-import {MongoClient} from "mongodb";
+import {Options} from "koa2-cors";
+import {ServerOptions} from "https";
 
 export const APP_CONFIG = {
     // env?: string | undefined,                // 默认是 NODE_ENV 或 "development"
@@ -10,10 +11,11 @@ export const APP_CONFIG = {
     // maxIpsCount?: number | undefined         // 从代理 ip 消息头读取的最大 ips, 默认为 0 (代表无限)
 }
 
+// Partial<session.opts>
 export const SESSION_CONFIG = {
     key: 'koa.sess',        // cookie key (default is koa:sess)
     maxAge: 86400000 * 7,   // cookie的过期时间 maxAge in ms (default is 1 days)
-    autoCommit: true,       // 自动设置表头
+    autoCommit: false,       // 自动设置表头
     overwrite: true,        // 是否可以overwrite    (默认default true)
     httpOnly: true,         // cookie是否只有服务器端可以访问 httpOnly or not (default true)
     signed: true,           // 签名默认true
@@ -22,7 +24,7 @@ export const SESSION_CONFIG = {
     secure: false,          // (string) session cookie sameSite options (default null, don't set it)
 };
 
-export const CORS_OPTION = {
+export const CORS_OPTION: Options = {
     origin: function (context: any) { //设置允许来自指定域名请求
         const {origin} = context.header;
         if (origin === 'https://localhost:3000' || origin === 'https://localhost:3001') {
@@ -38,9 +40,9 @@ export const CORS_OPTION = {
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization', 'Accept'] //设置获取其他自定义字段
 }
 
-export const SSL_OPTION = {
+export const SSL_OPTION: ServerOptions = {
     key: fs.readFileSync('/usr/local/etc/nginx/ssl/server.key.unsecure'),
-    cert: fs.readFileSync('/usr/local/etc/nginx/ssl/server.crt')
+    cert: fs.readFileSync('/usr/local/etc/nginx/ssl/server.crt'),
 }
 
 export const DB_CONFIG = {
