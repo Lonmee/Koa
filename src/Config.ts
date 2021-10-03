@@ -25,7 +25,7 @@ export const SESSION_CONFIG = {
 export const CORS_OPTION = {
     origin: function (context: any) { //设置允许来自指定域名请求
         const {origin} = context.header;
-        if (origin === 'https://localhost:3000' || origin === 'https://localhost') {
+        if (origin === 'https://localhost:3000' || origin === 'https://localhost:3001') {
             return origin;
         }
         //return '*'; // 允许来自所有域名请求
