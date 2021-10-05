@@ -3,6 +3,6 @@
 |
 +---assets('/assets')   +---routers maps('/routers')
 |
-+---version(/[v])       +---users(/users)               +---id(/opt:[number])           e.g. /1/users/5?name=lonmee&sex=male&age=40
++---version(/[v])       +---users(/users)               +---id(/opt:[number]crud)           e.g. /1/users/5?name=lonmee&sex=male&age=40
                         |
-                        +---st(/st)                     +---id(/opt:[number])
+                        +---log(/log)                   +---id(/opt:[number]cd)

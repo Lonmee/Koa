@@ -1,8 +1,9 @@
 import Router from "koa-router";
 import Koa from "koa";
 import HomeRouter from "./routers/HomeRouter";
-import UsersRouter from "./routers/UsersRouterV1";
 import LogRouter from "./routers/LogRouterV1";
+import UsersRouterV1 from "./routers/UsersRouterV1";
+import UsersRouterV2 from "./routers/UsersRouterV2";
 import session from "koa-session";
 import serve from "koa-static";
 import {Mongo} from "./db/Mongo";
@@ -16,7 +17,8 @@ const router = new Router();
 router
     .use(HomeRouter.routes())
     .use('/1/log', LogRouter.routes())
-    .use('/1/users', UsersRouter.routes());
+    .use('/1/users', UsersRouterV1.routes())
+    .use('/2/users', UsersRouterV2.routes());
 
 app
     .use(session(SESSION_CONFIG, app))
