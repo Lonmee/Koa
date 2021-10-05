@@ -2,6 +2,10 @@ import fs from "fs";
 import {Options} from "koa2-cors";
 import {ServerOptions} from "https";
 
+/**
+ *
+ * @type {{keys: string[]}}
+ */
 export const APP_CONFIG = {
     // env?: string | undefined,                // 默认是 NODE_ENV 或 "development"
     keys: ['Lonmee', '@Koa']                    // 签名的 cookie 密钥数组
@@ -11,17 +15,32 @@ export const APP_CONFIG = {
     // maxIpsCount?: number | undefined         // 从代理 ip 消息头读取的最大 ips, 默认为 0 (代表无限)
 }
 
-// Partial<session.opts>
+/**
+ * key: (string) cookie key (default is koa.sess)
+ * maxAge: (number || 'session') maxAge in ms (default is 1 days)
+ * 'session' will result in a cookie that expires when session/browser is closed
+ * Warning: If a session cookie is stolen, this cookie will never expire
+ * autoCommit: (boolean) automatically commit headers (default true)
+ * overwrite: (boolean) can overwrite or not (default true)
+ * httpOnly: (boolean) httpOnly or not (default true)
+ * signed: (boolean) signed or not (default true)
+ * rolling: (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false)
+ * renew: (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false
+ * secure: (boolean) secure cooki
+ * sameSite: (string) session cookie sameSite options (default null, don't set it)
+ * @type {{rolling: boolean, maxAge: number, sameSite: null, signed: boolean, httpOnly: boolean, renew: boolean, autoCommit: boolean, secure: boolean, overwrite: boolean, key: string}}
+ */
 export const SESSION_CONFIG = {
     key: 'koa.sess',        // cookie key (default is koa:sess)
     maxAge: 86400000 * 7,   // cookie的过期时间 maxAge in ms (default is 1 days)
-    autoCommit: false,       // 自动设置表头
+    autoCommit: true,       // 自动设置表头
     overwrite: true,        // 是否可以overwrite    (默认default true)
     httpOnly: true,         // cookie是否只有服务器端可以访问 httpOnly or not (default true)
     signed: true,           // 签名默认true
     rolling: false,         // 在每次请求时强行设置cookie，这将重置cookie过期时间（默认：false）
-    renew: true,            // (boolean) renew session when session is nearly expired,
-    secure: false,          // (string) session cookie sameSite options (default null, don't set it)
+    renew: false,            // (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)
+    secure: true,           // (boolean) secure cookie
+    sameSite: null,         // (string) session cookie sameSite options (default null, don't set it)
 };
 
 export const CORS_OPTION: Options = {
