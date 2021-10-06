@@ -33,7 +33,7 @@ const collections: Collection<Document>[] = [];
 async function setup() {
     // async method
     await client.connect();
-    const db = client.db(DB_CONFIG.mongodb.dbName);
+    const db = client.db(DB_CONFIG.mongodb.DB_KOA);
     collections[COLLECTIONS_KEY.users] = db.collection(COLLECTIONS_KEY[COLLECTIONS_KEY.users]);
     collections[COLLECTIONS_KEY.foo] = db.collection(COLLECTIONS_KEY[COLLECTIONS_KEY.foo]);
     return 'mongodb server connected';

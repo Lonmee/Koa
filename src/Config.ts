@@ -40,7 +40,7 @@ export const SESSION_CONFIG = {
     rolling: false,         // 在每次请求时强行设置cookie，这将重置cookie过期时间（默认：false）
     renew: false,            // (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)
     secure: true,           // (boolean) secure cookie
-    sameSite: null,         // (string) session cookie sameSite options (default null, don't set it)
+    // sameSite: null,         // (string) session cookie sameSite options (default null, don't set it)
 };
 
 export const CORS_OPTION: Options = {
@@ -67,6 +67,6 @@ export const SSL_OPTION: ServerOptions = {
 export const DB_CONFIG = {
     mongodb: {
         url: 'mongodb://localhost:27017',
-        dbName: 'koa'
+        DB_KOA: 'koa'
     }
 }
