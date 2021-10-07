@@ -26,7 +26,7 @@ export const APP_CONFIG = {
  * signed: (boolean) signed or not (default true)
  * rolling: (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false)
  * renew: (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false
- * secure: (boolean) secure cooki
+ * secure: (boolean) secure cookie
  * sameSite: (string) session cookie sameSite options (default null, don't set it)
  * @type {{rolling: boolean, maxAge: number, sameSite: null, signed: boolean, httpOnly: boolean, renew: boolean, autoCommit: boolean, secure: boolean, overwrite: boolean, key: string}}
  */
